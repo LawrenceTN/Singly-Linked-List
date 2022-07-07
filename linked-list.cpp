@@ -7,6 +7,7 @@ struct Node {
 
 // This funciton will be used to print the contents of our Linked List starting with the head of the list
 void printList(Node * head){ 
+    std::cout << "Printing the list:\n\t";
     while(head != NULL){
         std::cout << "[" << head->data << "] -> ";
         head = head->next;
@@ -17,6 +18,7 @@ void printList(Node * head){
 
 // This function will add a node to the linked list at the beginning and set it as the new node using a double ptr.
 void newHead(Node ** head, int data){
+    std::cout << "Adding a new head node with data: " << data << std::endl;
     Node * newNode = new Node();
     newNode->data = data;
     newNode->next = *head;
@@ -26,6 +28,7 @@ void newHead(Node ** head, int data){
 
 // The append node will add a node at the end of the list
 void appendNode(Node * head, int data){
+    std::cout << "Appending a node at the end with data: " << data << std::endl;
     Node * newNode = new Node();
     newNode->data = data;
     
@@ -38,6 +41,7 @@ void appendNode(Node * head, int data){
 
 // This function will add a node at a specifc placement at the user's request (1 = first node, 2 = 2nd node, etc...)
 void addNode(Node * head, int data, int placement){
+    std::cout << "Adding a node with data '" << data << "' at position [" << placement << "]\n";
     Node * newNode = new Node();
     newNode->data = data;
 
@@ -58,6 +62,9 @@ void addNode(Node * head, int data, int placement){
 
 // Remove's the first node (head) and assigns the next node as the new head.
 void removeHead(Node ** head){
+    
+    // Create a node ptr and set it to the next node after the head. Delete the old head, then use the double ptr head to label the new head of the linked list 
+    std::cout << "Removing the head node\n";
     Node * curr = *head;
     Node * newHead = NULL;
     
@@ -70,15 +77,51 @@ void removeHead(Node ** head){
 
 // Remove the last node (popping the linked list)
 void popNode(Node * head){
+    std::cout << "Removing the last node in the list\n";
     Node * prev = NULL;
     Node * curr = head;
-
+    
+    // Keep iterating and jumping along the list until you reach the end, then set the prev node to NULL before deleting the last node.
     while(curr->next != NULL){
         prev = curr;
         curr = curr->next;
     }
     prev->next = NULL;
     delete curr;
+    return;
+}
+
+void removeNode(Node * head, int placement){
+    std::cout << "Removing the node at position [" << placement <<  "]\n";
+    Node * curr = head;
+    Node * prev = NULL;
+    
+    // Humans naturally see the list and think the first entry is '1', therefore we use "placement-1"
+    // Make sure you connect the prev node and the next node of the chosen deleted node before deleeting.
+    for(int i = 0; i < placement-1; i++){
+        prev = curr;
+        curr = curr->next;
+    }
+    prev->next = curr->next;
+    delete curr;
+    return;
+}
+
+void reverseList(Node ** head){
+    std::cout << "Reversing the contents of the linked list\n";
+    Node * curr = *head;
+    Node * prev = NULL;
+    Node * next = NULL;
+    
+    // Really think about each step in this while-loop and draw it out. The pointers are used as signs/labels and '->next' is flipping the direction of our linked list.
+    while(curr != NULL){ 
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    // At the end, we have a new head, so using the double ptr head in the parameter you can set the new head to be prev.
+    *head = prev;
     return;
 }
 
@@ -127,6 +170,14 @@ int main(){
     // Remove the last node 
     popNode(head);
 
+    printList(head);
+    
+    removeNode(head, 3);
+    
+    printList(head);
+    
+    reverseList(&head);
+    
     printList(head);
 
     return 0;
