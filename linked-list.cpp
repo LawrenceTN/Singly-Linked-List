@@ -125,6 +125,45 @@ void reverseList(Node ** head){
     return;
 }
 
+void editHead(Node * head, int newData){
+    head->data = newData;
+    return;
+}
+
+
+void editNode(Node * head, int newData, int placement){ // If the user enters a number larger than the length of the list, it will automatically edit the last node's data.
+    bool validPlacement = false;
+    
+    while(!validPlacement){
+        if(placement < 1){
+            std::cout << "Invalid placement in the Linked List. Exiting...\n";
+            return;
+        }
+        else{
+            validPlacement = true;
+        }
+    }
+    
+        Node * curr = head;
+        for(int i = 0; i < placement-1; i++){ // If 1, it changes the head
+            curr = curr->next;
+            if(curr->next == NULL){
+                break;
+            }
+        }
+        curr->data = newData;
+        return;
+}
+
+
+void editEnd(Node * head, int newData){
+    while(head->next != NULL){
+        head = head->next;
+    }
+    head->data = newData;
+    return;
+}
+
 int main(){
     std::cout << "Welcome! In this project, I will be showing and explaining how to create a singly Linked List\n";
     std::cout << "Here we have 3 nodes all connected together\n";
@@ -179,6 +218,22 @@ int main(){
     reverseList(&head);
     
     printList(head);
+    
+    editHead(head, 10);
+    
+    printList(head);
+    
+    editEnd(head, 34);
+    
+    printList(head);
+    
+    editNode(head, 24, 5);
+    
+    printList(head);
 
+    editNode(head, 5, 0); // Result in an exit because there is no node before the head... (I'm explicitly labeling the first node 1st in the list and not 0th (like an array..))
+    
+    printList(head);
+    
     return 0;
 }
